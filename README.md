@@ -1,11 +1,37 @@
 # gh-secure
 
-A [GitHub CLI](https://cli.github.com) extension to enable security features on repositories, following best practices from [GitHub Security Lab](https://securitylab.github.com/protect-your-project.html).
+## Protect your project in 2 minutes
+
+A [GitHub CLI](https://cli.github.com) extension to enable security features on public repositories, following best practices from the [GitHub Security Lab](https://securitylab.github.com/).
+
+### Everything we'll cover is free for open source
+
+- Prevent malicious actors from exploiting vulnerabilities in your project
+- Protect your private assets by preventing secrets from leaking to the internet
+- Prevent malicious actors from exploiting publicly known vulnerabilities in your dependencies
+- Prevent unwanted access and modifications to your project
+- Prevent 0-days and exploits by keeping your security vulnerabilities private until they're fixed
+
+### No security or coding skills needed
+
+Only an open source project on GitHub where you have admin access.
+
+## How do I use it? 
+
+Running the tool will enable security features for your repository in 2 minutes or less.
+
+You can use it from your terminal, with an interactive or a "just do it" mode. 
+
+![gh-secure CLI demo](./assets/cli-demo.gif)
+
+You can also use it from the GitHub Copilot CLI or the GitHub Copilot App, or any other AI assistant who has access to the tool. Ask for an overview of your repository's security, ask for details on specific features, and ask the tool to enable the missing features for you.
+
+![gh-secure Copilot App demo](./assets/app-demo.gif)
 
 ## Installation
 
 ```bash
-gh extension install <owner>/gh-secure
+gh extension install GitHubSecurityLab/gh-secure
 ```
 
 ### Prerequisites
@@ -80,7 +106,8 @@ Some organizations have policies that restrict branch protection. Contact your o
 
 ## Resources
 
-- [GitHub Security Lab: Protect Your Project](https://securitylab.github.com/protect-your-project.html)
+- [6 security settings every GitHub maintainer should enable this week](https://github.blog/security/6-security-settings-every-github-maintainer-should-enable-this-week/)
+- [GitHub Security Lab](https://securitylab.github.com/)
 - [GitHub Security Documentation](https://docs.github.com/en/code-security)
 - [CodeQL Documentation](https://codeql.github.com/docs/)
 
