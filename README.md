@@ -5,7 +5,7 @@ A [GitHub CLI](https://cli.github.com) extension to enable security features on 
 ## Installation
 
 ```bash
-gh extension install <owner>/gh-secure
+gh extension install GitHubSecurityLab/gh-secure
 ```
 
 ### Prerequisites
