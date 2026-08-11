@@ -12,7 +12,7 @@ Thank you for your interest in contributing to this project! We welcome contribu
 
 1. Create a new branch for your changes: `git checkout -b my-feature`
 2. Make your changes and test them locally by running `./gh-secure` from the repo root.
-3. Ensure your changes work with both `--all` and interactive (step-by-step) modes.
+3. Ensure your changes work with both `--yes` and interactive (step-by-step) modes.
 4. Test with `--dry-run` to verify no unintended side effects.
 5. Commit your changes with clear, descriptive commit messages.
 6. Push to your fork and open a Pull Request against the `main` branch.

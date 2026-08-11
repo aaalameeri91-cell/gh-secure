@@ -21,7 +21,7 @@ fi
 
 # Globals
 DRY_RUN=false
-ENABLE_ALL=false
+NO_PROMPT=false
 REPO=""
 OWNER=""
 REPO_NAME=""
@@ -76,7 +76,7 @@ print_skip()    { echo -e "  ⊘ $*"; }
 
 confirm() {
   local prompt="$1"
-  if $ENABLE_ALL; then
+  if $NO_PROMPT; then
     return 0
   fi
   printf "\n%b" "$prompt (y/n): "
@@ -106,7 +106,7 @@ Commands:
 
 Flags:
   -r, --repo <owner/repo>   Target repository (default: current repo)
-  -a, --all                 Enable all features without prompting
+  -y, --yes                 Enable selected features without prompting for confirmation. Assume answer is yes.
   -n, --dry-run             Simulate changes without applying them
   -v, --version             Print version
   -h, --help                Show this help message
@@ -122,11 +122,11 @@ Features (pass one or more to enable only specific features):
 
 Examples:
   gh secure                                  # Interactive mode, all features
-  gh secure --all                            # Enable all features, no prompts
+  gh secure --yes                            # Enable all features, no prompts for confirmation
   gh secure branch-protection dependabot     # Enable only these two features
-  gh secure bp ss cs --all                   # Enable 3 features, no prompts
+  gh secure bp ss cs -y                      # Enable 3 features, no prompts for confirmation
   gh secure --repo owner/repo code-scanning  # Enable CodeQL on specific repo
-  gh secure --all --dry-run                  # Preview what would be enabled
+  gh secure --yes --dry-run                  # Preview what would be enabled
   gh secure status                           # Check current feature status
   gh secure status --repo owner/repo         # Check status of specific repo
 
@@ -153,8 +153,8 @@ parse_args() {
         REPO="$2"
         shift
         ;;
-      -a|--all)
-        ENABLE_ALL=true
+      -y|--yes)
+        NO_PROMPT=true
         ;;
       -n|--dry-run)
         DRY_RUN=true
@@ -343,7 +343,7 @@ enable_branch_protection() {
     has_rulesets=true
   fi
 
-  if ! $ENABLE_ALL; then
+  if ! $NO_PROMPT; then
     echo ""
     echo "  Why enable branch protection?"
     echo "  Branch protection blocks unwanted changes to your project. It prevents"
@@ -363,7 +363,7 @@ enable_branch_protection() {
   fi
 
   if $has_rulesets; then
-    # Always prompt when rulesets exist, even with --all
+    # Always prompt when rulesets exist, even with --yes
     printf "\n%b" "Active rulesets detected. Still enable branch protection? (y/n): "
     read -r answer
     if [[ ! "$answer" =~ ^[Yy]$ ]]; then
@@ -419,7 +419,7 @@ enable_vulnerability_reporting() {
     return 2
   fi
 
-  if ! $ENABLE_ALL; then
+  if ! $NO_PROMPT; then
     echo ""
     echo "  Why enable private vulnerability reporting?"
     echo "  Security Policy and Private Vulnerability Reporting (PVR) create a safe"
@@ -467,7 +467,7 @@ enable_secret_scanning() {
     return 2
   fi
 
-  if ! $ENABLE_ALL; then
+  if ! $NO_PROMPT; then
     echo ""
     echo "  Why enable secret scanning?"
     echo "  Sensitive data like API keys, tokens, and passwords can accidentally be"
@@ -510,7 +510,7 @@ enable_dependabot() {
     return 2
   fi
 
-  if ! $ENABLE_ALL; then
+  if ! $NO_PROMPT; then
     echo ""
     echo "  Why enable Dependabot?"
     echo "  Dependabot keeps your dependencies safe. It automatically checks"
@@ -564,7 +564,7 @@ enable_code_scanning() {
     return 2
   fi
 
-  if ! $ENABLE_ALL; then
+  if ! $NO_PROMPT; then
     echo ""
     echo "  Why enable code scanning?"
     echo "  GitHub code scanning automatically detects common security vulnerabilities"
@@ -641,8 +641,8 @@ main() {
     fi
   done
 
-  # If not --all, ask for mode
-  if ! $ENABLE_ALL; then
+  # If prompting is enabled, ask for mode
+  if ! $NO_PROMPT; then
     if $selecting_subset; then
       local count=${#SELECTED_FEATURES[@]}
       printf "\nEnable %d selected feature(s) on %s? (y/n): " "$count" "${OWNER}/${REPO_NAME}"
@@ -651,7 +651,7 @@ main() {
         echo "Aborted."
         exit 0
       fi
-      ENABLE_ALL=true
+      NO_PROMPT=true
     else
       echo ""
       echo "Choose enablement mode:"
@@ -667,7 +667,7 @@ main() {
           echo "Aborted."
           exit 0
         fi
-        ENABLE_ALL=true
+        NO_PROMPT=true
       else
         printf "\nProceed with step-by-step enablement? (y/n): "
         read -r answer
