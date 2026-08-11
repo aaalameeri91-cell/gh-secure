@@ -106,7 +106,7 @@ Commands:
 
 Flags:
   -r, --repo <owner/repo>   Target repository (default: current repo)
-  -np, --no-prompt          Enable selected features without prompting
+  -y, --yes                 Enable selected features without prompting for confirmation. Assume answer is yes.
   -n, --dry-run             Simulate changes without applying them
   -v, --version             Print version
   -h, --help                Show this help message
@@ -122,11 +122,11 @@ Features (pass one or more to enable only specific features):
 
 Examples:
   gh secure                                  # Interactive mode, all features
-  gh secure --no-prompt                      # Enable all features, no prompts
+  gh secure --yes                            # Enable all features, no prompts for confirmation
   gh secure branch-protection dependabot     # Enable only these two features
-  gh secure bp ss cs -np                     # Enable 3 features, no prompts
+  gh secure bp ss cs -y                      # Enable 3 features, no prompts for confirmation
   gh secure --repo owner/repo code-scanning  # Enable CodeQL on specific repo
-  gh secure --no-prompt --dry-run            # Preview what would be enabled
+  gh secure --yes --dry-run                  # Preview what would be enabled
   gh secure status                           # Check current feature status
   gh secure status --repo owner/repo         # Check status of specific repo
 
@@ -153,7 +153,7 @@ parse_args() {
         REPO="$2"
         shift
         ;;
-      -np|--no-prompt)
+      -y|--yes)
         NO_PROMPT=true
         ;;
       -n|--dry-run)
@@ -363,7 +363,7 @@ enable_branch_protection() {
   fi
 
   if $has_rulesets; then
-    # Always prompt when rulesets exist, even with --no-prompt
+    # Always prompt when rulesets exist, even with --yes
     printf "\n%b" "Active rulesets detected. Still enable branch protection? (y/n): "
     read -r answer
     if [[ ! "$answer" =~ ^[Yy]$ ]]; then
