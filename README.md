@@ -20,7 +20,7 @@ Only an open source project on GitHub where you have admin access.
 
 Running the tool will enable security features for your repository in 2 minutes or less.
 
-You can use it from your terminal, with an interactive or a "just do it" mode. 
+You can use it from your terminal, with an interactive mode or a "just do it" mode. 
 
 ![gh-secure CLI demo](./assets/cli-demo.gif)
 
