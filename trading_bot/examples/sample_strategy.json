@@ -1,0 +1,77 @@
+{
+  "name": "sma-crossover-demo",
+  "symbol": "DEMO",
+  "timeframe": "1D",
+  "initial_cash": 10000,
+  "trading_costs": {
+    "fee_per_trade": 1.0,
+    "slippage_bps": 5
+  },
+  "risk": {
+    "max_position_size": 0.95,
+    "stop_loss_pct": 0.05,
+    "take_profit_pct": 0.12
+  },
+  "strategy": {
+    "indicators": [
+      {
+        "name": "fast_sma",
+        "type": "sma",
+        "source": "close",
+        "window": 3
+      },
+      {
+        "name": "slow_sma",
+        "type": "sma",
+        "source": "close",
+        "window": 5
+      }
+    ],
+    "entry": {
+      "all": [
+        {
+          "left": { "indicator": "fast_sma" },
+          "operator": "crosses_above",
+          "right": { "indicator": "slow_sma" }
+        }
+      ]
+    },
+    "exit": {
+      "any": [
+        {
+          "left": { "indicator": "fast_sma" },
+          "operator": "crosses_below",
+          "right": { "indicator": "slow_sma" }
+        },
+        {
+          "left": { "price": "close" },
+          "operator": "<",
+          "right": { "indicator": "slow_sma" }
+        }
+      ]
+    }
+  },
+  "deployment": {
+    "target": "paper",
+    "require_explicit_approval": true,
+    "minimum_metrics": {
+      "total_return_pct": 0.5,
+      "sharpe_ratio": 0.05,
+      "max_drawdown_pct": 20.0
+    }
+  },
+  "tuning": {
+    "parameter_space": {
+      "strategy.indicators.0.window": [2, 3, 4],
+      "strategy.indicators.1.window": [5, 6, 7],
+      "risk.stop_loss_pct": [0.03, 0.05],
+      "risk.take_profit_pct": [0.1, 0.12]
+    },
+    "max_runs": 12,
+    "rank_by": [
+      { "metric": "total_return_pct", "direction": "desc" },
+      { "metric": "sharpe_ratio", "direction": "desc" },
+      { "metric": "max_drawdown_pct", "direction": "asc" }
+    ]
+  }
+}
